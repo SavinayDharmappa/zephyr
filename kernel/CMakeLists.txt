@@ -55,4 +55,8 @@ target_sources_ifdef(
 
 add_dependencies(kernel offsets_h)
 
-target_link_libraries(kernel zephyr_interface)
+target_link_libraries(kernel PUBLIC zephyr_interface)
+
+if(CONFIG_VERSION_HEADER)
+  target_link_libraries(kernel INTERFACE -uversion_header)
+endif()

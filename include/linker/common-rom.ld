@@ -73,3 +73,12 @@
 		KEEP(*(".log_backends"));
 		__log_backends_end = .;
 	} GROUP_LINK_IN(ROMABLE_REGION)
+
+#ifdef CONFIG_VERSION_HEADER
+	SECTION_PROLOGUE (version_header_section, (OPTIONAL),)
+	{
+		__version_header_start = .;
+		KEEP(*(".version_header*"))
+		__version_header_end = .;
+	} GROUP_LINK_IN(ROMABLE_REGION)
+#endif
