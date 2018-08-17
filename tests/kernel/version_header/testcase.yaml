@@ -1,0 +1,3 @@
+tests:
+  kernel.common.version header:
+    tags: version header
