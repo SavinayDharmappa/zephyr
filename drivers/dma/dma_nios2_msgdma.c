@@ -15,9 +15,8 @@
 #include "altera_msgdma_descriptor_regs.h"
 #include "altera_msgdma.h"
 
-#define LOG_LEVEL CONFIG_DMA_LOG_LEVEL
-#include <logging/log.h>
-LOG_MODULE_REGISTER(dma_nios2)
+#define SYS_LOG_LEVEL CONFIG_SYS_LOG_DMA_LEVEL
+#include <logging/sys_log.h>
 
 /* Device configuration parameters */
 struct nios2_msgdma_dev_cfg {
@@ -59,7 +58,7 @@ static void nios2_msgdma_callback(void *context)
 		err_code = 0;
 	}
 
-	LOG_DBG("msgdma csr status Reg: 0x%x", status);
+	SYS_LOG_DBG("msgdma csr status Reg: 0x%x", status);
 
 	dev_cfg->dma_callback((struct device *)context, 0, err_code);
 }
@@ -74,29 +73,29 @@ static int nios2_msgdma_config(struct device *dev, u32_t channel,
 
 	/* Nios-II MSGDMA supports only one channel per DMA core */
 	if (channel != 0) {
-		LOG_ERR("invalid channel number");
+		SYS_LOG_ERR("invalid channel number");
 		return -EINVAL;
 	}
 
 #if MSGDMA_0_CSR_PREFETCHER_ENABLE
 	if (cfg->block_count > 1) {
-		LOG_ERR("driver yet add support multiple descriptors");
+		SYS_LOG_ERR("driver yet add support multiple descriptors");
 		return -EINVAL;
 	}
 #else
 	if (cfg->block_count != 1) {
-		LOG_ERR("invalid block count!!");
+		SYS_LOG_ERR("invalid block count!!");
 		return -EINVAL;
 	}
 #endif
 
 	if (cfg->head_block == NULL) {
-		LOG_ERR("head_block ptr NULL!!");
+		SYS_LOG_ERR("head_block ptr NULL!!");
 		return -EINVAL;
 	}
 
 	if (cfg->head_block->block_size > MSGDMA_0_DESCRIPTOR_SLAVE_MAX_BYTE) {
-		LOG_ERR("DMA error: Data size too big: %d",
+		SYS_LOG_ERR("DMA error: Data size too big: %d",
 			    cfg->head_block->block_size);
 		return -EINVAL;
 	}
@@ -128,7 +127,7 @@ static int nios2_msgdma_config(struct device *dev, u32_t channel,
 			dma_block->block_size,
 			control);
 	} else {
-		LOG_ERR("invalid channel direction");
+		SYS_LOG_ERR("invalid channel direction");
 		status = -EINVAL;
 	}
 
@@ -155,7 +154,7 @@ static int nios2_msgdma_transfer_start(struct device *dev, u32_t channel)
 
 	/* Nios-II mSGDMA supports only one channel per DMA core */
 	if (channel != 0) {
-		LOG_ERR("Invalid channel number");
+		SYS_LOG_ERR("Invalid channel number");
 		return -EINVAL;
 	}
 
@@ -165,7 +164,7 @@ static int nios2_msgdma_transfer_start(struct device *dev, u32_t channel)
 	k_sem_give(&cfg->sem_lock);
 
 	if (status < 0) {
-		LOG_ERR("DMA transfer error (%d)", status);
+		SYS_LOG_ERR("DMA transfer error (%d)", status);
 	}
 
 	return status;
@@ -186,11 +185,11 @@ static int nios2_msgdma_transfer_stop(struct device *dev, u32_t channel)
 	k_sem_give(&cfg->sem_lock);
 
 	if (status & ALTERA_MSGDMA_CSR_STOP_STATE_MASK) {
-		LOG_DBG("DMA Dispatcher stopped");
+		SYS_LOG_DBG("DMA Dispatcher stopped");
 		ret = 0;
 	}
 
-	LOG_DBG("msgdma csr status Reg: 0x%x", status);
+	SYS_LOG_DBG("msgdma csr status Reg: 0x%x", status);
 
 	return status;
 }
