@@ -115,6 +115,10 @@ static ALWAYS_INLINE
 	return ret;
 }
 
+static ALWAYS_INLINE void sys_write16(u16_t data, mem_addr_t addr)
+{
+	*(volatile u16_t *)addr = data;
+}
 
 #endif /* !_ASMLANGUAGE */
 

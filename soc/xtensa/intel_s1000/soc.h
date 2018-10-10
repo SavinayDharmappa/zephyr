@@ -143,6 +143,8 @@ struct soc_dsp_shim_regs {
 #define USB_DW_BASE				0x000A0000
 #define USB_DW_IRQ				0x00000806
 
+#define SPI_DW_IRQ_FLAGS                        0
+
 /* Global Control registers */
 #define SOC_S1000_GLB_CTRL_BASE			(0x00081C00)
 

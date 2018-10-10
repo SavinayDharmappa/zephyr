@@ -76,6 +76,22 @@ config USB_COMPOSITE_BUFFER_SIZE
 	default 128
 endif # USB
 
+config SPI_0_IRQ_PRI
+	default 3
+
+config SPI_DW_FIFO_DEPTH
+	default 32
+
+config SPI_FLASH
+	def_bool y
+
+config SPI_FLASH_SPI_NAME
+	default "SPI_0"
+
+config SPI_FLASH_SPI_SLAVE
+	default 0
+
+
 if UART_NS16550
 
 config UART_NS16550_PORT_0

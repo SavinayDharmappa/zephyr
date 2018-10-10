@@ -63,4 +63,5 @@ void main(void)
 	disable_ts_powergate();
 	iomux_config_i2c();
 	iomux_config_ctsrts();
+	test_flash();
 }
